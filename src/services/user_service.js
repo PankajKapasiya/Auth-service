@@ -32,10 +32,50 @@ class UserService{
         }
     }
 
+    async signin(useremail, userpass){
+        try{
+            const email = await this.UserRepository.getbymail(useremail);
+            const check = this.checkpassword(userpass , email.password);
 
+            if(!check){
+                console.log("password doesn't match");
+                throw error;
+            }
+
+            const token = this.createtoken({email : useremail , id : email.id});
+            return token;
+        }
+        catch(error){
+            console.log("Something went wrong at signin");
+            throw error;
+        }
+    }
+
+
+    async isAuthnticate(token){
+        try{
+            const response = this.verifytoken(token);
+
+            if(!response){
+                throw {error : "invalid token"}
+            }
+
+            const user = await this.UserRepository.getbyid(response.id);
+            
+            if(!user){
+                 throw {error : "no user"}
+            }
+
+            return user.id;
+        }
+        catch(error){
+            console.log("Something went wrong at authenticate");
+            throw error;
+        }
+    }
     createtoken(user){
         try{
-            const response = jwt.sign(user, JWT_KEY , {expiresIn : 5});
+            const response = jwt.sign(user, JWT_KEY , {expiresIn : '1d'});
             return response;
         }
         catch(error){
@@ -54,7 +94,6 @@ class UserService{
             throw error;
         }
     }
-
     checkpassword(userinputpassword , encryptedpassword){
         try{
             const res =  bcrypt.compareSync(userinputpassword , encryptedpassword);

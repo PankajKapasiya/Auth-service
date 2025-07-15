@@ -40,7 +40,21 @@ class UserRepository{
             console.log("Something went wrong");
             throw error;
         }
+    }
 
+    async getbymail(mail){
+        try{
+            const res = await User.findOne({
+                where :{
+                    email :mail
+                }
+            });
+            return res;
+        }
+        catch(error){
+            console.log("unable to find");
+            throw error;
+        }
     }
 }
 
