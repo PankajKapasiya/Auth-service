@@ -18,4 +18,9 @@ router.post('/signin' ,
 router.get('/isAuthenticated' , UserController.isAuthenticated);
 
 router.delete('/:id',UserController.destroy);
+
+router.get('/isAdmin', 
+    authvalidate.validateid,
+    UserController.isAdmin
+);
 module.exports = router; 

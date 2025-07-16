@@ -10,6 +10,19 @@ const validate = async (req , res , next) =>{
     next();
 }
 
+const validateid = async (req, res, next) =>{
+    if(!req.body.id){
+        return res.status(400).json({
+            success : false,
+            data : {},
+            message : "Proivde validata id",
+            err :'id missing in the request'
+        });
+    }
+
+    next();
+}
 module.exports ={
-    validate
+    validate,
+    validateid
 }

@@ -86,12 +86,41 @@ const isAuthenticated = async (req, res) =>{
     }
     catch(error){
         console.log("unable to autheticate");
-        throw error;
+         return res.status(500).json({
+            success : false,
+            message : "unbale to autheticate",
+            err :error,
+            data :{}
+        })
+    }
+}
+
+const isAdmin = async (req,res) =>{
+    try{
+        console.log(req.body.id);
+        const response = await userservice.isAdmin(req.body.id);
+
+        return res.status(200).json({
+            success : true,
+            data : response,
+            err : {},
+            message : "succesfully find admin"
+        })
+    }
+    catch(error){
+        console.log("something went wrong in controllers");
+        return res.status(500).json({
+            success : false,
+            message : "unable to find",
+            err :error,
+            data :{}
+        })
     }
 }
 module.exports ={
     create,
     destroy,
     signin,
-    isAuthenticated
+    isAuthenticated,
+    isAdmin
 }
