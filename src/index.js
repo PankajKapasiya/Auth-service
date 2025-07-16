@@ -6,7 +6,9 @@ const app = express();
 // const PORT =3001;
 const apiroutes = require('./routes/index');
 const bcrypt = require('bcrypt');
-const {User} = require('./models/index');
+const {User, Role} = require('./models/index');
+
+const db = require('./models/index');
 
 const UserRepository = require('./repository/users_repository');
 const userservice =require('./services/user_service');
@@ -19,6 +21,15 @@ const prepareAndStartServer = () =>{
 
     app.listen(PORT, async () => {
         console.log(`Server started at port ${PORT}`);
+
+        if(process.env.DB_SYNC){
+            db.sequelize.sync({alter :true});
+        }
+
+        const u1= await User.findByPk(4);
+        const r1= await Role.findByPk(1);
+
+        u1.addRole(r1);
         // const incoming= '1234567';
         // const user = await User.findByPk(5);
 
