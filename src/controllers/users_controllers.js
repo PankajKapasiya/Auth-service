@@ -18,12 +18,12 @@ const create = async (req,res) =>{
         })
     }
     catch(error){
-        return res.status(201).json({
-            message : error.message,
-            success : false,
-            data : {},
-            err : {}
-        })
+       return res.status(error.statusCode).json({
+            message: error.message,
+            data: {},
+            success: false,
+            err: error.explanation
+        });
     }
 }
 
